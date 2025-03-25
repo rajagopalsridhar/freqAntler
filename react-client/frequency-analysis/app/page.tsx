@@ -5,11 +5,11 @@ import LoadingSpinner from './components/LoadingSpinner';
 import SpectrumChart from './components/SpectrumChart';
 import SpectrumSummary from './components/SpectrumSummary';
 import { fetchSpectrumData } from './services/spectrumApi';
-import { SpectrumData } from './types/spectrum';
+import { ApiResponse } from './types/spectrum';
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<SpectrumData[] | null>(null);
+  const [data, setData] = useState<ApiResponse | null>(null);
 
   const handleAnalyze = async () => {
     setLoading(true);
@@ -38,9 +38,12 @@ export default function Home() {
         {data && (
           <>
             <div className={styles.chartContainer}>
-              <SpectrumChart data={data} />
+              <SpectrumChart 
+                frequencies={data.frequency}
+                signalStrengths={data.signal_strengths}
+              />
             </div>
-            <SpectrumSummary data={data} />
+            <SpectrumSummary data={data.frequency_report.frequencyReports} />
           </>
         )}
       </main>

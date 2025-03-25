@@ -4,4 +4,12 @@ export interface SpectrumData {
   technology: string;
   service: string;
   frequency_range: string;
+}
+
+export interface ApiResponse {
+  signal_strengths: number[];
+  frequency: number[];
+  frequency_report: {
+    frequencyReports: SpectrumData[];
+  };
 } 

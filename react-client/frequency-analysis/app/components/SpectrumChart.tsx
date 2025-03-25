@@ -10,7 +10,6 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import { SpectrumData } from '../types/spectrum';
 
 ChartJS.register(
   CategoryScale,
@@ -23,20 +22,22 @@ ChartJS.register(
 );
 
 interface Props {
-  data: SpectrumData[];
+  frequencies: number[];
+  signalStrengths: number[];
 }
 
-export default function SpectrumChart({ data }: Props) {
+export default function SpectrumChart({ frequencies, signalStrengths }: Props) {
   const chartData = {
-    labels: data.map(d => d.frequency_range),
+    labels: frequencies.map(f => `${f.toFixed(1)} MHz`),
     datasets: [
       {
         label: 'Signal Strength',
-        data: data.map(d => d.strength),
+        data: signalStrengths,
         borderColor: '#3498db',
         backgroundColor: 'rgba(52, 152, 219, 0.2)',
         borderWidth: 2,
         pointBackgroundColor: '#3498db',
+        pointRadius: 1, // Make points smaller due to large dataset
         tension: 0.1,
       },
     ],
@@ -74,14 +75,17 @@ export default function SpectrumChart({ data }: Props) {
       x: {
         title: {
           display: true,
-          text: 'Frequency Range',
+          text: 'Frequency (MHz)',
           color: '#fff'
         },
         grid: {
           color: 'rgba(255, 255, 255, 0.1)'
         },
         ticks: {
-          color: '#fff'
+          color: '#fff',
+          maxRotation: 45,
+          autoSkip: true,
+          maxTicksLimit: 20
         }
       },
     },
