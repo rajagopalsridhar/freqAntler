@@ -56,7 +56,7 @@ router = APIRouter()
 
 # Define the data schema
 class FrequencyReport(BaseModel):
-    provider: str
+    operator: str
     strength: float
     technology: str
     service: str
@@ -66,7 +66,7 @@ class FrequencyInput(BaseModel):
     user_message: str
 
 class FinalResult(BaseModel):
-    signal_strenghts: List[float]
+    signal_strengths: List[float]
     frequency: List[float]
     frequency_report: FrequencyReport    
 
@@ -89,15 +89,15 @@ async def generate_report(request: FrequencyInput):  # Made async
                 {
                     "role": "system",
                     "content": (
-                        "You are an expert in frequency analysis. "
+                        "You are an expert in frequency analysis of wireless signals. "
                         f"I will provide two arrays: `sstr` containing signal strengths and `freq_mhz` containing corresponding frequencies from a frequency scan. "
-                        "The `freq_mhz` array represents frequency bands (in MHz), and the `sstr` array represents the signal strength (in dBm) for each corresponding frequency. "
-                        "Your task is to analyze this data and provide structured insights based solely on the values in `sstr` and `freq_mhz`. "
-                        "For each distinct frequency range in `freq_mhz`, calculate the average signal strength from the corresponding `sstr` values. "
-                        "Using publicly available knowledge of frequency allocations, identify potential services, providers, or technologies that typically operate within each frequency range, but do not extrapolate beyond the provided `freq` values. "
-                        "Output your analysis as a JSON array, where each element follows this schema: "
-                        "make sure to list technology, possible services, and possible providers that these signal strengths could come from"
                         f"Here is the data: signal strengths = {sstr}, frequencies = {freq_mhz}. "
+                        f"The `freq_mhz` array represents frequency values (in MHz), and the `sstr` array represents the signal strength (in dBm) for each corresponding frequency. "
+                        "Your task is to analyze this data and provide structured insights based solely on the values in `sstr` and `freq_mhz`. "
+                        f"Identify distinct frequency ranges in `freq_mhz` based on signal strengths"
+                        f"Do not extrapolate frequency range beyond maximum value in `freq_mhz`"
+                        "For each distinct frequency range identified, calculate the average signal strength from the corresponding `sstr` values. "
+                        "For each distinct frequency range identified, identify potential names of services, names of network operators operating in Austin, TX, and technologies that typically operate in each frequency range. "
                         f"Ensure that the response is in the following JSON format: {json.dumps(FrequencyReport.model_json_schema(), indent=2)}"
 
                     ),
