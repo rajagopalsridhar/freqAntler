@@ -7,16 +7,40 @@ interface Props {
 
 export default function SpectrumSummary({ data }: Props) {
   return (
-    <div className={styles.summary}>
-      {data.map((item, index) => (
-        <div key={index} className={styles.card}>
-          <h3>{item.provider}</h3>
-          <p><strong>Strength:</strong> {item.strength} dB</p>
-          <p><strong>Technology:</strong> {item.technology}</p>
-          <p><strong>Service:</strong> {item.service}</p>
-          <p><strong>Frequency Range:</strong> {item.frequency_range}</p>
-        </div>
-      ))}
+    <div className={styles.summaryContainer}>
+      <h2>Frequency Spectrum Analysis Report</h2>
+      <div className={styles.tableWrapper}>
+        <table className={styles.summaryTable}>
+          <thead>
+            <tr>
+              <th>Frequency Range</th>
+              <th>Provider</th>
+              <th>Signal Strength</th>
+              <th>Technology</th>
+              <th>Service</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item, index) => (
+              <tr key={index} className={styles.tableRow}>
+                <td>{item.frequency_range}</td>
+                <td>{item.provider}</td>
+                <td className={styles.strength}>
+                  <span className={styles.value}>{item.strength} dB</span>
+                  <div 
+                    className={styles.strengthBar} 
+                    style={{
+                      width: `${Math.min(100, Math.max(0, (item.strength + 100) / 100 * 100))}%`
+                    }}
+                  />
+                </td>
+                <td>{item.technology}</td>
+                <td>{item.service}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 } 

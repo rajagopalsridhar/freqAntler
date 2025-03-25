@@ -33,7 +33,10 @@ export default function SpectrumChart({ data }: Props) {
       {
         label: 'Signal Strength',
         data: data.map(d => d.strength),
-        borderColor: 'rgb(75, 192, 192)',
+        borderColor: '#3498db',
+        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+        borderWidth: 2,
+        pointBackgroundColor: '#3498db',
         tension: 0.1,
       },
     ],
@@ -44,10 +47,14 @@ export default function SpectrumChart({ data }: Props) {
     plugins: {
       legend: {
         position: 'top' as const,
+        labels: {
+          color: '#fff'
+        }
       },
       title: {
         display: true,
         text: 'Frequency Spectrum Analysis',
+        color: '#fff'
       },
     },
     scales: {
@@ -55,13 +62,27 @@ export default function SpectrumChart({ data }: Props) {
         title: {
           display: true,
           text: 'Signal Strength (dB)',
+          color: '#fff'
         },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#fff'
+        }
       },
       x: {
         title: {
           display: true,
           text: 'Frequency Range',
+          color: '#fff'
         },
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#fff'
+        }
       },
     },
   };

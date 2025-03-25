@@ -25,6 +25,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <div className={`${styles.gradientBg} ${(loading || data) ? styles.active : ''}`} />
       <main className={styles.main}>
         {!loading && !data && (
           <button className={styles.analyzeButton} onClick={handleAnalyze}>

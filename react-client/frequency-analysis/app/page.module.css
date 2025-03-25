@@ -14,6 +14,10 @@
   padding: 2rem;
   gap: 64px;
   font-family: var(--font-geist-sans);
+  background: #111;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +38,8 @@
   grid-row-start: 2;
   max-width: 1200px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
 }
 
 .main ol {
@@ -172,24 +178,60 @@ a.secondary {
 .analyzeButton {
   padding: 1rem 2rem;
   font-size: 1.5rem;
-  background-color: #0070f3;
+  background-color: #3498db;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   margin: 2rem auto;
   display: block;
+  position: relative;
+  z-index: 2;
 }
 
 .analyzeButton:hover {
-  background-color: #0051b3;
+  background-color: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
 }
 
 .chartContainer {
   margin: 2rem 0;
   padding: 1rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  z-index: 2;
+}
+
+.gradientBg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #111, #2c3e50);
+  z-index: 1;
+}
+
+.gradientBg.active {
+  animation: gradientAnimation 15s ease infinite;
+  background: linear-gradient(45deg, #141e30, #243b55, #2c3e50, #3498db);
+  background-size: 400% 400%;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
