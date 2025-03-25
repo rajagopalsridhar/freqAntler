@@ -26,14 +26,21 @@ export default function Home() {
   return (
     <div className={styles.page}>
       <div className={`${styles.gradientBg} ${(loading || data) ? styles.active : ''}`} />
-      <main className={styles.main}>
+      <main className={`${styles.main} ${(loading || data) ? styles.analyzing : ''}`}>
         {!loading && !data && (
-          <button className={styles.analyzeButton} onClick={handleAnalyze}>
+          <button 
+            className={styles.analyzeButton} 
+            onClick={handleAnalyze}
+          >
             Analyze
           </button>
         )}
         
-        {loading && <LoadingSpinner />}
+        {loading && (
+          <div className={styles.spinnerWrapper}>
+            <LoadingSpinner />
+          </div>
+        )}
         
         {data && (
           <>

@@ -6,14 +6,8 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  align-items: center;
-  justify-items: center;
   min-height: 100vh;
   padding: 2rem;
-  gap: 64px;
-  font-family: var(--font-geist-sans);
   background: #111;
   color: #fff;
   position: relative;
@@ -32,14 +26,23 @@
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.main.analyzing {
+  justify-content: flex-start;
+  gap: 3rem;
 }
 
 .main ol {
@@ -134,38 +137,14 @@ a.secondary {
   }
 }
 
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
+@media (max-width: 768px) {
+  .analyzeButton {
+    padding: 1.5rem 3rem;
+    font-size: 2rem;
   }
-
+  
   .main {
-    align-items: center;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    padding: 1rem;
   }
 }
 
@@ -176,36 +155,68 @@ a.secondary {
 }
 
 .analyzeButton {
-  padding: 1rem 2rem;
-  font-size: 1.5rem;
-  background-color: #3498db;
+  padding: 2rem 4rem;
+  font-size: 2.5rem;
+  background: transparent;
   color: white;
-  border: none;
-  border-radius: 8px;
+  border: 3px solid #3498db;
+  border-radius: 15px;
   cursor: pointer;
-  transition: all 0.2s;
-  margin: 2rem auto;
-  display: block;
+  transition: all 0.3s ease;
   position: relative;
   z-index: 2;
+  overflow: hidden;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: buttonAppear 0.5s ease;
+}
+
+.analyzeButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(52, 152, 219, 0.2),
+    transparent
+  );
+  transition: 0.5s;
 }
 
 .analyzeButton:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 
+    0 5px 15px rgba(52, 152, 219, 0.4),
+    0 0 30px rgba(52, 152, 219, 0.2),
+    0 0 60px rgba(52, 152, 219, 0.1);
+  border-color: #2980b9;
+  letter-spacing: 4px;
+}
+
+.analyzeButton:hover::before {
+  left: 100%;
 }
 
 .chartContainer {
-  margin: 2rem 0;
-  padding: 1rem;
+  width: 100%;
+  margin: 0;
+  padding: 1.5rem;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
   z-index: 2;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation-delay: 0.2s;
 }
 
 .gradientBg {
@@ -216,6 +227,7 @@ a.secondary {
   bottom: 0;
   background: linear-gradient(45deg, #111, #2c3e50);
   z-index: 1;
+  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .gradientBg.active {
@@ -225,13 +237,73 @@ a.secondary {
 }
 
 @keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  50% {
-    background-position: 100% 50%;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  100% {
-    background-position: 0% 50%;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes buttonAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Add ripple effect for button click */
+.analyzeButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(52, 152, 219, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease-out, height 0.6s ease-out;
+}
+
+.analyzeButton:active::after {
+  width: 300%;
+  height: 300%;
+}
+
+/* Loading spinner container styles */
+.spinnerWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
