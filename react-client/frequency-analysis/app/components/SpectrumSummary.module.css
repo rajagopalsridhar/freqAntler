@@ -1,0 +1,18 @@
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+}
+
+.card h3 {
+  margin-top: 0;
+  color: #333;
+} 
