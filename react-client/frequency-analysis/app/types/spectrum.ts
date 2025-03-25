@@ -10,6 +10,6 @@ export interface ApiResponse {
   signal_strengths: number[];
   frequency: number[];
   frequency_report: {
-    frequencyReports: SpectrumData[];
+    frequency_ranges: SpectrumData[];
   };
 } 

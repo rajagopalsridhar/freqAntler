@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './page.module.css';
 import LoadingSpinner from './components/LoadingSpinner';
 import SpectrumChart from './components/SpectrumChart';
@@ -10,7 +10,10 @@ import { ApiResponse } from './types/spectrum';
 export default function Home() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<ApiResponse | null>(null);
-
+  useEffect(() => {
+    console.log("DEBUG");
+    console.log(data);
+  }, [data]);
   const handleAnalyze = async () => {
     setLoading(true);
     try {
@@ -44,14 +47,18 @@ export default function Home() {
         
         {data && (
           <>
+          {data && data.frequency_report?.frequency_ranges?.length > 0 && (
+          <>
             <div className={styles.chartContainer}>
               <SpectrumChart 
                 frequencies={data.frequency}
                 signalStrengths={data.signal_strengths}
               />
             </div>
-            <SpectrumSummary data={data.frequency_report.frequencyReports} />
+            <SpectrumSummary data={data.frequency_report.frequency_ranges} />
           </>
+        )}
+        </>
         )}
       </main>
     </div>
