@@ -27,18 +27,23 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={`${styles.gradientBg} ${(loading || data) ? styles.active : ''}`} />
-      <main className={`${styles.main} ${(loading || data) ? styles.analyzing : ''}`}>
-        {!loading && !data && (
-          <button 
-            className={styles.analyzeButton} 
-            onClick={handleAnalyze}
-          >
-            Analyze
-          </button>
-        )}
-        
+
+<div className={styles.page}>
+  <div className={`${styles.gradientBg} ${(loading || data) ? styles.active : ''}`} />
+  <main className={`${styles.main} ${(loading || data) ? styles.analyzing : ''}`}>
+    {!loading && !data && (
+      <>
+        <h2 className={styles.title}>Frequency ANTLER-izer</h2> {/* Title added here */}
+        <button 
+          className={styles.analyzeButton} 
+          onClick={handleAnalyze}
+        >
+          Analyze
+        </button>
+      </>
+    )}
+ 
+
         {loading && (
           <div className={styles.spinnerWrapper}>
             <LoadingSpinner />

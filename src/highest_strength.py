@@ -45,7 +45,7 @@ def process_single_data_to_csv(data_string, output_filename="max_signal_strength
     max_strengths = {}
     
     lines = data_string.strip().split('\n')
-    
+    lines = lines[1:]  # Skip header
     for line in lines:
         if not line.strip():
             continue

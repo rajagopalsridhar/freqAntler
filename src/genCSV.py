@@ -14,5 +14,6 @@ script_name = "tinySA.py"
 for i in range(10):
     filename = f"output_{i + 1}.csv"
     print(f"Running iteration {i + 1}")
-    args = ['-o', filename]
+    args = ['-S', str(100e6), '-E', str(900e6) ,'-o', filename]
+    print(args)
     subprocess.run(["python", script_name] + args)

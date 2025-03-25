@@ -13,9 +13,9 @@ export default function SpectrumSummary({ data }: Props) {
         <table className={styles.summaryTable}>
           <thead>
             <tr>
-              <th>Frequency Range</th>
-              <th>Provider</th>
-              <th>Signal Strength</th>
+              <th>Frequency Range (MHz)</th>
+              <th>Operator</th>
+              <th>Signal Strength (dBm)</th>
               <th>Technology</th>
               <th>Service</th>
             </tr>
@@ -24,7 +24,7 @@ export default function SpectrumSummary({ data }: Props) {
             {data.map((item, index) => (
               <tr key={index} className={styles.tableRow}>
                 <td>{item.frequency_range}</td>
-                <td>{item.provider}</td>
+                <td>{item.operator}</td>
                 <td className={styles.strength}>
                   <span className={styles.value}>{item.strength} dB</span>
                   <div 

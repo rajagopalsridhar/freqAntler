@@ -6,6 +6,7 @@ import json
 import os
 import csv
 from typing import List
+import subprocess
 
 from dotenv import load_dotenv
 
@@ -17,6 +18,12 @@ def read_signal_strength(filename):
     frequencies = []
     strengths = []
     
+    #generate batch CSV file
+    subprocess.run(["python", "genCSV.py"])
+
+    #generate max CSV file 
+    subprocess.run(["python", "highest_strength.py"])
+
     # Read the CSV file
     try:
         with open(filename, 'r') as csvfile:
@@ -96,6 +103,7 @@ async def generate_report(request: FrequencyInput):  # Made async
                         "Your task is to analyze this data and provide structured insights based solely on the values in `sstr` and `freq_mhz`. "
                         f"Identify distinct frequency ranges in `freq_mhz` based on signal strengths"
                         f"Do not extrapolate frequency range beyond maximum value in `freq_mhz`"
+                        "Make sure the frequency ranges don't use more than 2 decimal places"
                         "For each distinct frequency range identified, calculate the average signal strength from the corresponding `sstr` values. "
                         "For each distinct frequency range identified, identify potential names of services, names of network operators operating in Austin, TX, and technologies that typically operate in each frequency range. "
                         f"Ensure that the response is in the following JSON format: {json.dumps(FrequencyReport.model_json_schema(), indent=2)}"
