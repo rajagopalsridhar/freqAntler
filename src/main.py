@@ -5,6 +5,7 @@ from pydantic import BaseModel
 import json
 import os
 import csv
+from typing import List
 
 from dotenv import load_dotenv
 
@@ -64,6 +65,13 @@ class FrequencyReport(BaseModel):
 class FrequencyInput(BaseModel):
     user_message: str
 
+class FinalResult(BaseModel):
+    signal_strenghts: List[float]
+    frequency: List[float]
+    frequency_report: FrequencyReport    
+
+
+
 @router.post("/prompt")
 async def generate_report(request: FrequencyInput):  # Made async
     """
@@ -74,22 +82,29 @@ async def generate_report(request: FrequencyInput):  # Made async
         # Write code here 
         print("Antler Hackathon Frequency Analyzer")
         sstr, freq = read_signal_strength('max_signal_strengths.csv')
-
+        freq_mhz = [x / 1e6 for x in freq]
         
-        chat_completion = await client.chat.completions.create(  # Added await
+        chat_completion = await client.chat.completions.create(
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are an expert in frequency analysis." 
-                        f"The variable {sstr} refers to the signal strength and the variable {freq} refers to the corresponding frequencies from a frequency scan"
-                        "With publically available knowledge, can you summarize what kinds of services, providers,technology are being used?"
-                        f" Output should be in the JSON format as an array using the schema: {json.dumps(FrequencyReport.model_json_schema(), indent=2)}"
+                        "You are an expert in frequency analysis. "
+                        f"I will provide two arrays: `sstr` containing signal strengths and `freq_mhz` containing corresponding frequencies from a frequency scan. "
+                        "The `freq_mhz` array represents frequency bands (in MHz), and the `sstr` array represents the signal strength (in dBm) for each corresponding frequency. "
+                        "Your task is to analyze this data and provide structured insights based solely on the values in `sstr` and `freq_mhz`. "
+                        "For each distinct frequency range in `freq_mhz`, calculate the average signal strength from the corresponding `sstr` values. "
+                        "Using publicly available knowledge of frequency allocations, identify potential services, providers, or technologies that typically operate within each frequency range, but do not extrapolate beyond the provided `freq` values. "
+                        "Output your analysis as a JSON array, where each element follows this schema: "
+                        "make sure to list technology, possible services, and possible providers that these signal strengths could come from"
+                        f"Here is the data: signal strengths = {sstr}, frequencies = {freq_mhz}. "
+                        f"Ensure that the response is in the following JSON format: {json.dumps(FrequencyReport.model_json_schema(), indent=2)}"
+
                     ),
                 },
                 {
                     "role": "user",
-                    "content": request.user_message,
+                    "content": "Analyze the provided signal strength and frequency data, and return the results in the specified JSON format.",
                 },
             ],
             model="llama-3.3-70b-versatile",
@@ -100,7 +115,14 @@ async def generate_report(request: FrequencyInput):  # Made async
 
         
         # Return the content from the completion
-        return json.loads(chat_completion.choices[0].message.content)  # Parse JSON string to dict
+        # return json.loads(chat_completion.choices[0].message.content)  # Parse JSON string to dict
+        return {
+            "signal_strengths": sstr,
+            "frequency": freq_mhz,
+            "frequency_report": json.loads(chat_completion.choices[0].message.content)
+
+        }
+    
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing request: {str(e)}")
 
