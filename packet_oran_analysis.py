@@ -220,7 +220,7 @@ def analyze_packet(packet):
                 final_report['prb'][i] = compute_magnitudes(better_ilist[i], better_qlist[i])
             
             print(final_report)
-
+            return final_report 
         
         else:
             print("No ORAN_FH_CUS layer found in packet.")
